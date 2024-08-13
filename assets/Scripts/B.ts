@@ -1,6 +1,6 @@
 import { _decorator, Component, Node } from 'cc';
 import { EventBinding } from "db://assets/EventBus/EventBinding";
-import { PlayerEvent } from "db://assets/EventBus/Events";
+import { PlayerEvent, TestEvent } from "db://assets/EventBus/Events";
 import { EventBus } from "db://assets/EventBus/EventBus";
 
 const {ccclass, property} = _decorator;
@@ -10,7 +10,7 @@ export class B extends Component {
     playerEventBinding: EventBinding<PlayerEvent>;
 
     onLoad() {
-        this.playerEventBinding = new EventBinding<PlayerEvent>((event: PlayerEvent) => {
+        this.playerEventBinding = new EventBinding(PlayerEvent.name, (event: PlayerEvent) => {
             console.log("Triggered in B!!!");
             console.log(`Health: ${event.health}, mana: ${event.mana}`);
         });
@@ -20,9 +20,11 @@ export class B extends Component {
 
     start() {
         EventBus.Raise<PlayerEvent>(new PlayerEvent(100, 100));
+        EventBus.Raise<TestEvent>(new TestEvent());
 
         setTimeout(() => {
             EventBus.Raise<PlayerEvent>(new PlayerEvent(100, 100));
+            EventBus.Raise<TestEvent>(new TestEvent());
         }, 3000);
     }
 

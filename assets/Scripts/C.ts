@@ -10,7 +10,7 @@ export class C extends Component {
     playerEventBinding: EventBinding<PlayerEvent>;
 
     onLoad() {
-        this.playerEventBinding = new EventBinding<PlayerEvent>((event: PlayerEvent) => {
+        this.playerEventBinding = new EventBinding(PlayerEvent.name, (event: PlayerEvent) => {
             console.log("Triggered in C!!!");
             console.log(`Health: ${event.health}, mana: ${event.mana}`);
         });

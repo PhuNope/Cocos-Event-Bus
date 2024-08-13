@@ -3,6 +3,7 @@ import { IEvent } from "db://assets/EventBus/Events";
 export interface IEventBinding<T extends IEvent> {
     onEvent?: (event: T) => void;
     onEventNoArgs?: () => void;
+    eventName: string;
 }
 
 export class EventBinding<T extends IEvent> implements IEventBinding<T> {
@@ -11,9 +12,11 @@ export class EventBinding<T extends IEvent> implements IEventBinding<T> {
     public onEventNoArgs: () => void = () => {
     };
 
-    constructor(onEvent?: (event: T) => void);
-    constructor(onEventNoArgs?: () => void);
-    constructor(onEventOrNoArgs?: ((event: T) => void) | (() => void)) {
+    public eventName: string;
+
+    constructor(eventName: string, onEvent: (event: T) => void);
+    constructor(eventName: string, onEventNoArgs?: () => void);
+    constructor(eventName: string, onEventOrNoArgs?: ((event: T) => void) | (() => void)) {
         if (onEventOrNoArgs) {
             if (onEventOrNoArgs.length === 0) {
                 this.onEventNoArgs = onEventOrNoArgs as () => void;
@@ -21,6 +24,8 @@ export class EventBinding<T extends IEvent> implements IEventBinding<T> {
                 this.onEvent = onEventOrNoArgs as (event: T) => void;
             }
         }
+
+        this.eventName = eventName;
     }
 
     public add(onEvent: () => void): void;
